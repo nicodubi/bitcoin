@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Bitcoin Muun</string>
+    <string name="dialog_waiting">Wait please...</string>
+    <string name="default_error_event">Something went wrong, please try again</string>
+    <string name="generating_address">Generating a new address...</string>
+    <string name="qr_code_generation_error">Something went wrong QR code generation</string>
+
+</resources>
