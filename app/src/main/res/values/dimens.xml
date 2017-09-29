@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="splash_image_dimmen">200dp</dimen>
-    <dimen name="qr_address_dimen">200dp</dimen>
+    <dimen name="qr_address_dimen">175dp</dimen>
+    <dimen name="root_padding_screen">20dp</dimen>
+    <dimen name="generate_address_margin_bottom_titles">10dp</dimen>
 
 </resources>

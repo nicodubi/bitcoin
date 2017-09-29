@@ -4,5 +4,17 @@
     <string name="default_error_event">Something went wrong, please try again</string>
     <string name="generating_address">Generating a new address...</string>
     <string name="qr_code_generation_error">Something went wrong QR code generation</string>
+    <string name="generate_address_subtitle">Both with your text address and your
+        QR address code you will be able to deposit or receive bitcoins into your wallet instantly</string>
+    <string name="generate_address_title">Deposit and receive bitcoins</string>
+    <string name="address_text_hint">Address....</string>
+    <string name="confirm_address_dialog_title">Confirm your address</string>
+    <string name="confirm_address_dialog_message">This will be your address. You will not be able to modify it. Do you want to confirm and continue?</string>
+    <string name="yes">yes</string>
+    <string name="no">no</string>
+    <string name="must_generate_address">You haven´t got an address yet.</string>
+    <string name="generate_an_address">Generate it!</string>
+    <string name="not_internet_connection">There is not internet connection</string>
+    <string name="wifi">WiFi</string>
 
 </resources>

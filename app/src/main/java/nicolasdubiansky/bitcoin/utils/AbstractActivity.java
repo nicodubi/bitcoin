@@ -1,9 +1,16 @@
 package nicolasdubiansky.bitcoin.utils;
 
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -15,6 +22,7 @@ import org.greenrobot.eventbus.SubscriberExceptionEvent;
 
 import nicolasdubiansky.bitcoin.R;
 import nicolasdubiansky.bitcoin.entities.User;
+import nicolasdubiansky.bitcoin.events.CreateAddressEvent;
 import nicolasdubiansky.bitcoin.events.ErrorResponseEvent;
 import nicolasdubiansky.bitcoin.events.SuccessResponseDefault;
 import nicolasdubiansky.bitcoin.web_services.retrofit.RetroiftServiceExecutor;
@@ -24,7 +32,7 @@ import nicolasdubiansky.bitcoin.web_services.retrofit.RetroiftServiceExecutor;
  * Created by Nicolas on 25/09/2017.
  */
 
-public class AbstractActivity extends FragmentActivity {
+public class AbstractActivity extends AppCompatActivity {
 
     private FrameLayout root;
     protected ProgressDialog dialog;
@@ -39,7 +47,6 @@ public class AbstractActivity extends FragmentActivity {
         verificateUserSingleton();
         setContentView(R.layout.activity_abstract);
         root = (FrameLayout) findViewById(R.id.root_abstract);
-        //printHashKey();
     }
 
     private void initSingletons() {
@@ -51,6 +58,34 @@ public class AbstractActivity extends FragmentActivity {
     protected void attachRoot(int layoutRes) {
         View view = getLayoutInflater().inflate(layoutRes, null, false);
         root.addView(view);
+    }
+
+    protected void postEvent(CreateAddressEvent event, String dialogTitle) {
+        if (deviceHasConnection()) {
+            showProgressDialog(dialogTitle);
+            EventBus.getDefault().post(event);
+        }else{
+            showSnackBarToEnableInternet();
+        }
+
+    }
+
+    private void showSnackBarToEnableInternet() {
+        Snackbar.make(root, R.string.not_internet_connection, Snackbar.LENGTH_LONG).
+                setAction(R.string.wifi, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startActivity(new Intent(WifiManager.ACTION_PICK_WIFI_NETWORK));
+                    }
+                }).show();
+    }
+
+    private boolean deviceHasConnection() {
+        ConnectivityManager conMan = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo.State mobile = conMan.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState();
+        NetworkInfo.State wifi = conMan.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState();
+        return ((mobile == NetworkInfo.State.CONNECTED || mobile == NetworkInfo.State.CONNECTING) ||
+                (wifi == NetworkInfo.State.CONNECTED || wifi == NetworkInfo.State.CONNECTING));
     }
 
     protected void showProgressDialog(@Nullable String title) {

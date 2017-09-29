@@ -1,42 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical">
+    android:padding="@dimen/root_padding_screen">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/generate_address_margin_bottom_titles"
+            android:text="@string/generate_address_title"
+            android:textSize="16dp"
+            android:textStyle="bold" />
 
 
-    <TextView
-        android:id="@+id/address_text_textview"
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/generate_address_margin_bottom_titles"
+            android:text="@string/generate_address_subtitle"
+            android:textSize="16dp" />
+
+
+        <ImageView
+            android:id="@+id/address_qr_code_image"
+            android:layout_width="@dimen/qr_address_dimen"
+            android:layout_height="@dimen/qr_address_dimen"
+            android:layout_gravity="center"
+            android:layout_marginBottom="@dimen/generate_address_margin_bottom_titles"
+            android:src="@drawable/qr_placeholder" />
+
+
+        <TextView
+            android:id="@+id/address_text_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="40dp"
+            android:gravity="center"
+            android:maxLength="60"
+            android:hint="@string/address_text_hint"
+            android:textSize="16sp" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="40dp"
-        android:hint="your address..."
-        android:textSize="20sp" />
+        android:orientation="vertical"
+        android:layout_gravity="bottom|right">
 
 
-    <ImageView
-        android:id="@+id/address_qr_code_image"
-        android:layout_width="@dimen/qr_address_dimen"
-        android:layout_height="@dimen/qr_address_dimen"
-        android:layout_marginBottom="40dp"
-        android:src="@drawable/qr_placeholder" />
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/generate_new_address_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/refresh_icon"
+            app:fabSize="normal"
+            app:elevation="4dp"
+            android:layout_marginBottom="@dimen/generate_address_margin_bottom_titles"/>
 
 
-    <TextView
-        android:id="@+id/generate_new_address_textview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="40dp"
-        android:text="NEW ADDRESS"
-        android:textSize="20sp" />
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/save_address_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/check_icon"
+            app:elevation="4dp"
+            app:fabSize="normal" />
 
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/save_address_textview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="SAVE"
-        android:textSize="20sp" />
-
-</LinearLayout>
+</FrameLayout>
