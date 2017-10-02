@@ -1,13 +1,19 @@
 package nicolasdubiansky.bitcoin.activities;
 
+import android.animation.Animator;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
+import android.view.Gravity;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 
 import org.greenrobot.eventbus.Subscribe;
 
@@ -72,6 +78,7 @@ public class WalletBalanceActivity extends AbstractActivity {
             refreshBalance(savedBalance);
         }
     }
+
 
     private void setUpSwipeRefreshBalance() {
         swipeRefreshBalance.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -201,8 +208,18 @@ public class WalletBalanceActivity extends AbstractActivity {
 
     @OnClick(R.id.transaction_record_textview_id)
     public void goToRecordTransaction() {
-        Intent intent = new Intent(this, RecordTransactionActivity.class);
-        startActivity(intent);
+        YoYo.with(Techniques.Shake).duration(500).onEnd(new YoYo.AnimatorCallback() {
+            @Override
+            public void call(Animator animator) {
+                Intent intent = new Intent(WalletBalanceActivity.this, RecordTransactionActivity.class);
+                startActivity(intent);
+            }
+        }).onStart(new YoYo.AnimatorCallback() {
+            @Override
+            public void call(Animator animator) {
+            }
+        }).playOn(transactionRecord);
+
     }
 
 }

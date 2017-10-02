@@ -1,5 +1,6 @@
 package nicolasdubiansky.bitcoin.custom_views;
 
+import android.animation.Animator;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.annotation.Nullable;
@@ -8,6 +9,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -46,6 +50,30 @@ public class AddressView extends LinearLayout {
         } else {
             addressQR.setImageBitmap(qrCodeBitmap);
         }
+        animateAddress();
+    }
+
+    private void animateAddress() {
+
+        YoYo.with(Techniques.ZoomInDown).duration(1000).onEnd(new YoYo.AnimatorCallback() {
+            @Override
+            public void call(Animator animator) {
+            }
+        }).onStart(new YoYo.AnimatorCallback() {
+            @Override
+            public void call(Animator animator) {
+            }
+        }).playOn(addressText);
+
+        YoYo.with(Techniques.ZoomInUp).duration(1000).onEnd(new YoYo.AnimatorCallback() {
+            @Override
+            public void call(Animator animator) {
+            }
+        }).onStart(new YoYo.AnimatorCallback() {
+            @Override
+            public void call(Animator animator) {
+            }
+        }).playOn(addressQR);
     }
 
 
