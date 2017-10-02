@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ImageView
+        android:id="@+id/address_qr_code_image_id"
+        android:layout_width="@dimen/qr_address_dimen"
+        android:layout_height="@dimen/qr_address_dimen"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/generate_address_margin_bottom_titles"
+        android:src="@drawable/qr_placeholder" />
+
+
+    <TextView
+        android:id="@+id/address_text_textview_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/generate_address_margin_bottom_titles"
+        android:gravity="center"
+        android:hint="@string/address_text_hint"
+        android:maxLength="60"
+        android:textSize="14sp" />
+
+
+</merge>

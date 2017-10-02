@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/generate_address_margin_bottom_titles"
             android:text="@string/generate_address_subtitle"
-            android:textSize="@dimen/generate_address_subtitle" />
+            android:textSize="16sp" />
 
 
         <nicolasdubiansky.bitcoin.custom_views.AddressView

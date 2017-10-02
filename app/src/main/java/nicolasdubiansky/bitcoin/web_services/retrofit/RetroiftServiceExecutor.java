@@ -76,11 +76,7 @@ public class RetroiftServiceExecutor {
                 if (response.body() != null) {
                     EventBus.getDefault().post(new GetBalanceEventSuccess(response.body()));
                 } else {
-                    if (response.code() == TOO_MANY_REQUESTS_CODE) {
-                        verificateToken(response.code(), event, new GetBalanceEventError("Too many requests. Try again later."));
-                    } else {
-                        verificateToken(response.code(), event, null);
-                    }
+                    verificateToken(response.code(), event, null);
                 }
             }
 
@@ -171,7 +167,9 @@ public class RetroiftServiceExecutor {
     //TODO in case we have a 401 unauthorized response, we will try to get a valid auth refreshing token for instance and resend the failure event request
     //TODO for this coding challenge we just send a default error
     private void verificateToken(int code, final Object event, Object errorEvent) {
-        if (errorEvent == null) {
+        if (code == TOO_MANY_REQUESTS_CODE) {
+            sendDefaultError("Too many requests. Try again later.");
+        } else if (errorEvent == null) {
             sendDefaultError();
         } else {
             EventBus.getDefault().post(errorEvent);

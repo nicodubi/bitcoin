@@ -31,7 +31,7 @@
                 android:layout_gravity="center|left"
                 android:text="@string/record_transaction"
                 android:textColor="@color/transparent"
-                android:textSize="20sp" />
+                android:textSize="@dimen/record_transaction_title" />
 
 
         </android.support.v7.widget.Toolbar>

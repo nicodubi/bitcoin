@@ -55,7 +55,7 @@ public class AddressView extends LinearLayout {
 
     private void animateAddress() {
 
-        YoYo.with(Techniques.ZoomInDown).duration(1000).onEnd(new YoYo.AnimatorCallback() {
+        YoYo.with(Techniques.ZoomInLeft).duration(1000).onEnd(new YoYo.AnimatorCallback() {
             @Override
             public void call(Animator animator) {
             }

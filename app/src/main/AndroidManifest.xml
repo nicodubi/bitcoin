@@ -22,17 +22,11 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".activities.GenerateAddressActivity"
-            android:screenOrientation="portrait" />
+        <activity android:name=".activities.GenerateAddressActivity" />
 
-        <activity
-            android:name=".activities.RecordTransactionActivity"
-            android:screenOrientation="portrait" />
+        <activity android:name=".activities.RecordTransactionActivity" />
 
-        <activity
-            android:name=".activities.WalletBalanceActivity"
-            android:screenOrientation="portrait" />
+        <activity android:name=".activities.WalletBalanceActivity" />
     </application>
 
 </manifest>
