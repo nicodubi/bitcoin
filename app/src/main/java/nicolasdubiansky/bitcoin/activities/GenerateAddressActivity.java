@@ -19,10 +19,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import nicolasdubiansky.bitcoin.R;
+import nicolasdubiansky.bitcoin.custom_views.AddressView;
 import nicolasdubiansky.bitcoin.entities.QrCodeGenerator;
+import nicolasdubiansky.bitcoin.entities.User;
 import nicolasdubiansky.bitcoin.events.CreateAddressEvent;
 import nicolasdubiansky.bitcoin.events.CreateAddressEventSuccess;
 import nicolasdubiansky.bitcoin.utils.AbstractActivity;
+import nicolasdubiansky.bitcoin.utils.CustomSharedPreferences;
 import nicolasdubiansky.bitcoin.web_services.rest_entities.Address;
 
 /**
@@ -31,16 +34,13 @@ import nicolasdubiansky.bitcoin.web_services.rest_entities.Address;
 
 public class GenerateAddressActivity extends AbstractActivity {
 
-    private static final Integer QR_IMAGE_DIMEN = 200;
     public static final String ADDRESS_TEXT_KEY = "ADDRESS TEXT KEY";
 
-    @BindView(R.id.address_qr_code_image)
-    ImageView addressQrCode;
-    @BindView(R.id.address_text_textview)
-    TextView addressText;
-    @BindView(R.id.save_address_textview)
+    @BindView(R.id.address_view_id)
+    AddressView addressView;
+    @BindView(R.id.save_address_button_id)
     FloatingActionButton saveAddress;
-    @BindView(R.id.generate_new_address_textview)
+    @BindView(R.id.generate_new_address_button_id)
     FloatingActionButton generateNewAddress;
 
     //TODO pass to view model architecture!
@@ -49,6 +49,7 @@ public class GenerateAddressActivity extends AbstractActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle(getString(R.string.generate_address));
         attachRoot(R.layout.activity_generate_address);
         ButterKnife.bind(this);
         registerOnEventBus(this);
@@ -59,27 +60,21 @@ public class GenerateAddressActivity extends AbstractActivity {
         generateNewAddress();
     }
 
-    @OnClick(R.id.generate_new_address_textview)
+    @OnClick(R.id.generate_new_address_button_id)
     public void generateNewAddress() {
-        postEvent(new CreateAddressEvent(),getString(R.string.generating_address));
+        postEvent(new CreateAddressEvent(), getString(R.string.generating_address),true);
     }
-
 
 
     @Subscribe
     public void generateAddressSuccess(CreateAddressEventSuccess eventSuccess) {
+        User.getInstance().setAddress(eventSuccess.getAddress());
         address = eventSuccess.getAddress();
-        addressText.setText(address.getAddress());
-        Bitmap qrCodeBitmap = QrCodeGenerator.generateQrCodeImage(address.getAddress(), QR_IMAGE_DIMEN);
-        if (qrCodeBitmap == null) {
-            Toast.makeText(this, R.string.qr_code_generation_error, Toast.LENGTH_SHORT).show();
-        } else {
-            addressQrCode.setImageBitmap(qrCodeBitmap);
-        }
+        addressView.setAddress(address.getAddress());
         stopDialog();
     }
 
-    @OnClick(R.id.save_address_textview)
+    @OnClick(R.id.save_address_button_id)
     public void saveAddress() {
         if (address != null && address.getAddress() != null) {
             showConfirmAddressDialog();
@@ -108,7 +103,7 @@ public class GenerateAddressActivity extends AbstractActivity {
     }
 
     private void showGenerateAddressAlert() {
-        Snackbar.make(addressText, R.string.must_generate_address, Snackbar.LENGTH_SHORT).
+        Snackbar.make(addressView, R.string.must_generate_address, Snackbar.LENGTH_SHORT).
                 setAction(R.string.generate_an_address, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -119,6 +114,8 @@ public class GenerateAddressActivity extends AbstractActivity {
 
 
     private void goToWalletBalanceActivity() {
+        CustomSharedPreferences sharedPreferences = new CustomSharedPreferences(this);
+        sharedPreferences.saveUserAddress(address);
         Intent intent = new Intent(this, WalletBalanceActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra(ADDRESS_TEXT_KEY, address.getAddress());

@@ -63,6 +63,8 @@ public class SplashActivity extends AbstractActivity {
     private void checkIfIsFirstTime() {
         CustomSharedPreferences sharedPref = new CustomSharedPreferences(this);
         Address saveAddress = sharedPref.getUserAddress();
+        //uncomment to simulate that there is not generating address yet
+        //saveAddress = null;
         if (saveAddress == null) {
             goToGenerateAddressActivity();
         } else {

@@ -10,6 +10,7 @@ import nicolasdubiansky.bitcoin.events.CreateAddressEvent;
 import nicolasdubiansky.bitcoin.events.CreateAddressEventSuccess;
 import nicolasdubiansky.bitcoin.events.ErrorResponseEvent;
 import nicolasdubiansky.bitcoin.events.GetBalanceEvent;
+import nicolasdubiansky.bitcoin.events.GetBalanceEventError;
 import nicolasdubiansky.bitcoin.events.GetBalanceEventSuccess;
 import nicolasdubiansky.bitcoin.events.GetFullBalanceEvent;
 import nicolasdubiansky.bitcoin.events.GetFullBalanceEventSuccess;
@@ -29,6 +30,7 @@ import retrofit2.Response;
 public class RetroiftServiceExecutor {
 
     private static final int UNAUTHORIZED_CODE = 401;
+    private static final int TOO_MANY_REQUESTS_CODE = 429;
     private static RetroiftServiceExecutor instance;
     private RetrofitInstance retrofitInstance;
 
@@ -53,7 +55,6 @@ public class RetroiftServiceExecutor {
             public void onResponse(Call<Address> call, Response<Address> response) {
                 if (response.body() != null) {
                     EventBus.getDefault().post(new CreateAddressEventSuccess(response.body()));
-                    //sendResponseFromApiResponse(response, new CreateAddressEventSuccess(response.body()), null);
                 } else {
                     verificateToken(response.code(), event, null);
                 }
@@ -73,9 +74,13 @@ public class RetroiftServiceExecutor {
             @Override
             public void onResponse(Call<Balance> call, Response<Balance> response) {
                 if (response.body() != null) {
-                    //TODO sendResponseFromApiResponse(response, new GetBalanceEventSuccess(response.body()), null);
+                    EventBus.getDefault().post(new GetBalanceEventSuccess(response.body()));
                 } else {
-                    verificateToken(response.code(), event, null);
+                    if (response.code() == TOO_MANY_REQUESTS_CODE) {
+                        verificateToken(response.code(), event, new GetBalanceEventError("Too many requests. Try again later."));
+                    } else {
+                        verificateToken(response.code(), event, null);
+                    }
                 }
             }
 
@@ -93,7 +98,7 @@ public class RetroiftServiceExecutor {
             @Override
             public void onResponse(Call<FullBalance> call, Response<FullBalance> response) {
                 if (response.body() != null) {
-                    //TODO  sendResponseFromApiResponse(response, new GetFullBalanceEventSuccess(response.body()), null);
+                    EventBus.getDefault().post(new GetFullBalanceEventSuccess(response.body()));
                 } else {
                     verificateToken(response.code(), event, null);
                 }
@@ -109,12 +114,12 @@ public class RetroiftServiceExecutor {
 
     @Subscribe
     public void sendBitcoinsToAddress(final SendBitcoinsEvent event) {
-        Call<String> call = retrofitInstance.getService().sendBitcoinsToAddress(event.getUrlToSendMoney(), event.getAddress());
+        Call<String> call = retrofitInstance.getService().sendBitcoinsToAddress(event.getUrlToSendMoney());
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 if (response.body() != null) {
-                    //TODO sendResponseFromApiResponse(response, new SendBitcoinsEventSuccess(response.body()), null);
+                    EventBus.getDefault().post(new SendBitcoinsEventSuccess(response.body()));
                 } else {
                     verificateToken(response.code(), event, null);
                 }
@@ -127,28 +132,6 @@ public class RetroiftServiceExecutor {
         });
     }
 
-    /*
-
-    private <T> void sendResponseFromApiResponse(Response<ApiResponse<T>> response, Object eventSuccess, String msgError) {
-        ApiResponse<T> responseBody = response.body();
-        if (response.isSuccessful() && responseBody.getResponse() != null) {
-            if (responseBody.getResponse() != null) {
-                EventBus.getDefault().post(eventSuccess);
-            } else {
-                //TODO ACA HABRA QUE PASARLE EL ATRIBUTO DE LA RESPONSE msgError CUANDO VENGA POR POSTMAN por ahora se pasa por parametro y se pregunta si es null, despues sacar parametro y el if else
-                if (msgError != null) {
-                    EventBus.getDefault().post(new ErrorResponseEvent(msgError));
-                } else {
-                    EventBus.getDefault().post(new ErrorResponseEvent());
-                }
-                // EventBus.getDefault().post(new ErrorResponseEvent(responseBody.getMsgError()));
-            }
-        } else {
-            sendDefaultError();
-        }
-    }
-*/
-
     private void sendDefaultError() {
         EventBus.getDefault().post(new ErrorResponseEvent());
 
@@ -157,28 +140,6 @@ public class RetroiftServiceExecutor {
     private void sendDefaultError(String errorMsg) {
         EventBus.getDefault().post(new ErrorResponseEvent(errorMsg));
 
-    }
-
-    private void sendResponse(Response response, Object eventSuccess) {
-        if (response.isSuccessful() && response.body() != null) {
-            EventBus.getDefault().post(eventSuccess);
-        } else {
-            //TODO ACA HABRA QUE PASARLE EL ATRIBUTO DE LA RESPONSE msgError CUANDO VENGA POR POSTMAN
-            sendDefaultError();
-            // EventBus.getDefault().post(new ErrorResponseEvent(responseBody.getMsgError()));
-        }
-    }
-
-    private void sendResponse(Response response, Object eventSuccess, String msgError) {
-        if (response.isSuccessful() && response.body() != null) {
-            EventBus.getDefault().post(eventSuccess);
-        } else {
-            if (msgError != null) {
-                EventBus.getDefault().post(new ErrorResponseEvent(msgError));
-            } else {
-                sendDefaultError();
-            }
-        }
     }
 
 
@@ -207,7 +168,14 @@ public class RetroiftServiceExecutor {
 */
 
 
+    //TODO in case we have a 401 unauthorized response, we will try to get a valid auth refreshing token for instance and resend the failure event request
+    //TODO for this coding challenge we just send a default error
     private void verificateToken(int code, final Object event, Object errorEvent) {
+        if (errorEvent == null) {
+            sendDefaultError();
+        } else {
+            EventBus.getDefault().post(errorEvent);
+        }
        /* if (code == UNAUTHORIZED_CODE) {
             Call<UserLoginResponse> call = retrofitInstance.getService().login(User.getInstance().getCredentials());
             call.enqueue(new Callback<UserLoginResponse>() {

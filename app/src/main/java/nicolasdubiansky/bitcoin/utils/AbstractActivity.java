@@ -20,6 +20,8 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.SubscriberExceptionEvent;
 
+import java.util.ArrayList;
+
 import nicolasdubiansky.bitcoin.R;
 import nicolasdubiansky.bitcoin.entities.User;
 import nicolasdubiansky.bitcoin.events.CreateAddressEvent;
@@ -38,6 +40,9 @@ public class AbstractActivity extends AppCompatActivity {
     protected ProgressDialog dialog;
 
     private boolean openFromNotification;
+    protected CustomSharedPreferences sharedPreferences;
+
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,6 +52,7 @@ public class AbstractActivity extends AppCompatActivity {
         verificateUserSingleton();
         setContentView(R.layout.activity_abstract);
         root = (FrameLayout) findViewById(R.id.root_abstract);
+        sharedPreferences = new CustomSharedPreferences(this);
     }
 
     private void initSingletons() {
@@ -60,11 +66,13 @@ public class AbstractActivity extends AppCompatActivity {
         root.addView(view);
     }
 
-    protected void postEvent(CreateAddressEvent event, String dialogTitle) {
+    protected void postEvent(Object event, String dialogTitle, boolean showProgressDialog) {
         if (deviceHasConnection()) {
-            showProgressDialog(dialogTitle);
+            if (showProgressDialog) {
+                showProgressDialog(dialogTitle);
+            }
             EventBus.getDefault().post(event);
-        }else{
+        } else {
             showSnackBarToEnableInternet();
         }
 
@@ -80,6 +88,22 @@ public class AbstractActivity extends AppCompatActivity {
                 }).show();
     }
 
+    protected void setAppBarTitle(String title) {
+        if (getActionBar() != null) {
+            getActionBar().setTitle(title);
+        } else if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(title);
+        }
+    }
+
+    protected void hideAppBar() {
+        if (getActionBar() != null) {
+            getActionBar().hide();
+        } else if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
+    }
+
     private boolean deviceHasConnection() {
         ConnectivityManager conMan = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo.State mobile = conMan.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState();
@@ -93,8 +117,8 @@ public class AbstractActivity extends AppCompatActivity {
             dialog = new ProgressDialog(this);
             dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             dialog.setCancelable(false);
-            dialog.setTitle(title == null ? getString(R.string.dialog_waiting) : title);
         }
+        dialog.setTitle(title == null ? getString(R.string.dialog_waiting) : title);
         if (!dialog.isShowing()) {
             dialog.show();
         }
@@ -136,16 +160,19 @@ public class AbstractActivity extends AppCompatActivity {
     }
 
     protected void verificateUserSingleton() {
-        if (!User.getInstance().isAppInit() || ((this.openFromNotification) &&
-                (User.getInstance().getBitcoinAddress() == null || User.getInstance().getBitcoinAddress().isEmpty()))) {
+        if ((!User.getInstance().isAppInit() || this.openFromNotification) ||
+                User.getInstance().getBitcoinAddress() == null || User.getInstance().getBitcoinAddress().isEmpty()) {
             Log.d("SINGLETON LOST USER", "Recovering user info...");
             refreshToken();
+            RetroiftServiceExecutor.getInstance();
+            EventBus.getDefault();
         }
     }
 
     private void refreshToken() {
         User.getInstance().setAppInit(true);
         CustomSharedPreferences sharedPreferences = new CustomSharedPreferences(this);
+        User.getInstance().setAddress(sharedPreferences.getUserAddress());
         //TODO in case we have a expired token or a null token for an OS KILL we have to get a new one.
         //TODO for this challenge code it´s enough getting the saved address.
         /*Credentials credentials = sharedPreferences.getUserCredentials();
@@ -176,6 +203,11 @@ public class AbstractActivity extends AppCompatActivity {
     }
     */
 
+    /**
+     * Handle unexpected event bus exception
+     *
+     * @param exceptionEvent
+     */
     @Subscribe
     public void notSuscriberEventBusException(SubscriberExceptionEvent exceptionEvent) {
         stopDialog();

@@ -36,4 +36,11 @@ public class Transaction {
     public void setOutputs(List<TransactionOutput> outputs) {
         this.outputs = outputs;
     }
+
+    public Integer getAmount() {
+        if (outputs != null && !outputs.isEmpty()) {
+            return outputs.get(0).getValue();
+        }
+        return 0;
+    }
 }

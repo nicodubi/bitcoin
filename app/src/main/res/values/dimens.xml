@@ -4,5 +4,6 @@
     <dimen name="qr_address_dimen">175dp</dimen>
     <dimen name="root_padding_screen">20dp</dimen>
     <dimen name="generate_address_margin_bottom_titles">10dp</dimen>
+    <dimen name="margin_default_floating_button">16dp</dimen>
 
 </resources>

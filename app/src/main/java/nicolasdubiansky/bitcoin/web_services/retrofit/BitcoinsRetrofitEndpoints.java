@@ -38,10 +38,10 @@ public interface BitcoinsRetrofitEndpoints {
     Call<FullBalance> getFullBalance(@Path("address") String address, @Query("before") Integer height);
 
 
-    @POST("{address}")
+    @POST
     /**
      * urlToSendMoney: https://faucet.eordano.com/{address}
      */
-    Call<String> sendBitcoinsToAddress(@Url String urlToSendMoney, @Path("address") String address);
+    Call<String> sendBitcoinsToAddress(@Url String urlToSendMoney);
 
 }

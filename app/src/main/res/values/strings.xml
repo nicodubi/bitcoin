@@ -16,5 +16,19 @@
     <string name="generate_an_address">Generate it!</string>
     <string name="not_internet_connection">There is not internet connection</string>
     <string name="wifi">WiFi</string>
+    <string name="generate_address">Generate Address</string>
+    <string name="wallet_balance">Wallet Balance</string>
+    <string name="record_transaction">Record Transaction</string>
+    <string name="getting_balance_dialog">Getting wallet balance...</string>
+    <string name="partial_balance">Partial Balance:</string>
+    <string name="uncofirmed_balance">Unconfirmed balance</string>
+    <string name="total_balance">Total balance:</string>
+    <string name="receiving_money">Receiving money...</string>
+    <string name="receive_moeny_dialog_title">Receive money</string>
+    <string name="confirm_receiving_money_dialog_message">You are getting bitcoins. After completing the operation you will can see your updated balance. This may have taken a few seconds. If your balance does not reflect the operation you can refresh the screen by swipping it down.</string>
+    <string name="bitcoin_currency">Currency: Bitcoin (BTC)</string>
+    <string name="gettin_full_record_transaction">Getting record transaction...</string>
+    <string name="confirmed_date_transaction">Confirmed transaction: %1$s</string>
+    <string name="pending_date_transaction">Pending transaction confirmation. Received: %1$s</string>
 
 </resources>

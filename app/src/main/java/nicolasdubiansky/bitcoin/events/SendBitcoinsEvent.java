@@ -20,6 +20,6 @@ public class SendBitcoinsEvent {
     }
 
     public String getUrlToSendMoney() {
-        return urlToSendMoney;
+        return urlToSendMoney + address;
     }
 }

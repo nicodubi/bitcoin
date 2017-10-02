@@ -19,6 +19,7 @@ public class RetrofitInstance{
         //para agregar interceptor para que en cada request que se haga ya esten los HEADERS
         OkHttpClient clientWithInterceptor = new OkHttpClient.Builder().addInterceptor(new HeaderInterceptor()).build();
         GsonBuilder gson = new GsonBuilder().registerTypeAdapter(Date.class, new DateDeserializer());
+        gson.setLenient();
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BitcoinsRetrofitEndpoints.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create(gson.create()))

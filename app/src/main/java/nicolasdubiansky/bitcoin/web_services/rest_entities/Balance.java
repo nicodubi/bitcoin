@@ -8,6 +8,7 @@ public class Balance {
     private String address;
     private Integer total_received;
     private Integer total_sent;
+    //partial balance
     private Integer balance;
     private Integer unconfirmed_balance;
     //balance + uncofirmed_balance

@@ -17,6 +17,7 @@ import java.util.TimeZone;
 
 public class DateDeserializer implements JsonDeserializer<Date> {
 
+    //TODO if any response contains date info, this serializer will convert it to the right format
     @Override
     public Date deserialize(JsonElement element, Type arg1, JsonDeserializationContext arg2) throws JsonParseException {
         String date = element.getAsString();

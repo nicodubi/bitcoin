@@ -11,12 +11,11 @@
         android:orientation="vertical">
 
         <TextView
+            style="@style/title_style"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/generate_address_margin_bottom_titles"
-            android:text="@string/generate_address_title"
-            android:textSize="16dp"
-            android:textStyle="bold" />
+            android:text="@string/generate_address_title" />
 
 
         <TextView
@@ -27,48 +26,33 @@
             android:textSize="16dp" />
 
 
-        <ImageView
-            android:id="@+id/address_qr_code_image"
-            android:layout_width="@dimen/qr_address_dimen"
-            android:layout_height="@dimen/qr_address_dimen"
-            android:layout_gravity="center"
-            android:layout_marginBottom="@dimen/generate_address_margin_bottom_titles"
-            android:src="@drawable/qr_placeholder" />
-
-
-        <TextView
-            android:id="@+id/address_text_textview"
-            android:layout_width="match_parent"
+        <nicolasdubiansky.bitcoin.custom_views.AddressView
+            android:id="@+id/address_view_id"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginBottom="40dp"
-            android:gravity="center"
-            android:maxLength="60"
-            android:hint="@string/address_text_hint"
-            android:textSize="16sp" />
-
+            android:layout_gravity="center" />
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_gravity="bottom|right">
+        android:layout_gravity="bottom|right"
+        android:orientation="vertical">
 
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/generate_new_address_textview"
+            android:id="@+id/generate_new_address_button_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/generate_address_margin_bottom_titles"
             android:src="@drawable/refresh_icon"
-            app:fabSize="normal"
             app:elevation="4dp"
-            android:layout_marginBottom="@dimen/generate_address_margin_bottom_titles"/>
+            app:fabSize="normal" />
 
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/save_address_textview"
+            android:id="@+id/save_address_button_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/check_icon"
