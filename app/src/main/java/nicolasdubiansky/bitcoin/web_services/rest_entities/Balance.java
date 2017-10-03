@@ -9,10 +9,10 @@ public class Balance {
     private Integer total_received;
     private Integer total_sent;
     //partial balance
-    private Integer balance;
-    private Integer unconfirmed_balance;
+    private Long balance;
+    private Long unconfirmed_balance;
     //balance + uncofirmed_balance
-    private Integer final_balance;
+    private Long final_balance;
     private Integer n_tx;
     private Integer unconfirmed_n_tx;
     //count of transactions
@@ -42,27 +42,27 @@ public class Balance {
         this.total_sent = total_sent;
     }
 
-    public Integer getBalance() {
+    public Long getBalance() {
         return balance;
     }
 
-    public void setBalance(Integer balance) {
+    public void setBalance(Long balance) {
         this.balance = balance;
     }
 
-    public Integer getUnconfirmed_balance() {
+    public Long getUnconfirmed_balance() {
         return unconfirmed_balance;
     }
 
-    public void setUnconfirmed_balance(Integer unconfirmed_balance) {
+    public void setUnconfirmed_balance(Long unconfirmed_balance) {
         this.unconfirmed_balance = unconfirmed_balance;
     }
 
-    public Integer getFinal_balance() {
+    public Long getFinal_balance() {
         return final_balance;
     }
 
-    public void setFinal_balance(Integer final_balance) {
+    public void setFinal_balance(Long final_balance) {
         this.final_balance = final_balance;
     }
 

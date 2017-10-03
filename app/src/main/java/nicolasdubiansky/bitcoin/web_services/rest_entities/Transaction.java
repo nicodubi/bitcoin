@@ -2,6 +2,8 @@ package nicolasdubiansky.bitcoin.web_services.rest_entities;
 
 import java.util.List;
 
+import nicolasdubiansky.bitcoin.entities.User;
+
 /**
  * Created by Nicolas on 24/9/2017.
  */
@@ -37,10 +39,14 @@ public class Transaction {
         this.outputs = outputs;
     }
 
-    public Integer getAmount() {
+    public Long getAmount() {
         if (outputs != null && !outputs.isEmpty()) {
-            return outputs.get(0).getValue();
+            for(TransactionOutput txOutput : outputs){
+                if(txOutput.getAddresses().contains(User.getInstance().getBitcoinAddress())) {
+                    return txOutput.getValue();
+                }
+            }
         }
-        return 0;
+        return Long.valueOf(0);
     }
 }

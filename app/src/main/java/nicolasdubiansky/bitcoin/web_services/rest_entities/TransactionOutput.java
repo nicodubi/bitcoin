@@ -8,14 +8,14 @@ import java.util.List;
 
 public class TransactionOutput {
 
-    private Integer value;
+    private Long value;
     private List<String> addresses;
 
-    public Integer getValue() {
+    public Long getValue() {
         return value;
     }
 
-    public void setValue(Integer value) {
+    public void setValue(Long value) {
         this.value = value;
     }
 

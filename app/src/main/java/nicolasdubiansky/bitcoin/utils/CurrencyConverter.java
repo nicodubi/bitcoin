@@ -11,4 +11,9 @@ public class CurrencyConverter {
         return Double.valueOf(shatoshis) / ONE_BICTOIN_IN_SHATOSHIS;
 
     }
+
+    public static Double shatoshiToBitcoin(Long shatoshis) {
+        return Double.valueOf(shatoshis) / ONE_BICTOIN_IN_SHATOSHIS;
+
+    }
 }
