@@ -43,7 +43,7 @@ public class AddressView extends LinearLayout {
 
     //for this challenge code it´s a simple String, but in the future we have to receive an address abstraction (SOLID Principle dependency inversion)
     public void setAddress(String address) {
-        addressText.setText("kdaksdmalsdamlDKLSMDLKASMLFmdlksmldmsldkfPARALAWACHONGANOkdaksdmalsdamlDKLSMDLKASMLFmdlksmldmsldkfPARALAWACHONGANO");
+        addressText.setText(address);
         Bitmap qrCodeBitmap = QrCodeGenerator.generateQrCodeImage(address, QR_IMAGE_DIMEN);
         if (qrCodeBitmap == null) {
             Toast.makeText(getContext(), R.string.qr_code_generation_error, Toast.LENGTH_SHORT).show();
