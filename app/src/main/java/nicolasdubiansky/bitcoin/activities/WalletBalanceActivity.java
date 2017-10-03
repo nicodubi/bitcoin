@@ -8,6 +8,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
@@ -127,10 +128,12 @@ public class WalletBalanceActivity extends AbstractActivity {
     @Subscribe
     public void sendMoneyEventSuccess(SendBitcoinsEventSuccess event) {
         try {
+            //TODO blockcypher takes one or two second until reflecting the changes even when the request is completed. So I wait one second too to showing the new balance.
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        Toast.makeText(this,R.string.send_bitcoins_success,Toast.LENGTH_SHORT).show();
         stopDialog();
         refreshBalanceRequest(false);
     }

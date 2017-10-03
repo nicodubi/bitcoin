@@ -30,5 +30,6 @@
     <string name="gettin_full_record_transaction">Getting record transaction...</string>
     <string name="confirmed_date_transaction">Confirmed transaction: %1$s</string>
     <string name="pending_date_transaction">Pending transaction confirmation. Received: %1$s</string>
+    <string name="send_bitcoins_success">Bitcoins reception successfully!</string>
 
 </resources>
