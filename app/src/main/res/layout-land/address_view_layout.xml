@@ -19,7 +19,7 @@
         android:maxLength="60"
         android:maxLines="2"
         android:ellipsize="end"
-        android:ems="15"
+        android:ems="12"
         android:textSize="16sp" />
 
 
