@@ -4,13 +4,10 @@ package nicolasdubiansky.bitcoin.web_services.retrofit;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.util.ArrayList;
-
 import nicolasdubiansky.bitcoin.events.CreateAddressEvent;
 import nicolasdubiansky.bitcoin.events.CreateAddressEventSuccess;
 import nicolasdubiansky.bitcoin.events.ErrorResponseEvent;
 import nicolasdubiansky.bitcoin.events.GetBalanceEvent;
-import nicolasdubiansky.bitcoin.events.GetBalanceEventError;
 import nicolasdubiansky.bitcoin.events.GetBalanceEventSuccess;
 import nicolasdubiansky.bitcoin.events.GetFullBalanceEvent;
 import nicolasdubiansky.bitcoin.events.GetFullBalanceEventSuccess;

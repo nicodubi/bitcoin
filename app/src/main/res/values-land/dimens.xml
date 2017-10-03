@@ -2,8 +2,8 @@
 <resources>
     <dimen name="splash_image_dimmen">200dp</dimen>
     <dimen name="qr_address_dimen">135dp</dimen>
-    <dimen name="root_padding_screen">10dp</dimen>
-    <dimen name="generate_address_margin_bottom_titles">10dp</dimen>
+    <dimen name="root_padding_screen">15dp</dimen>
+    <dimen name="generate_address_margin_bottom_titles">5dp</dimen>
     <dimen name="margin_default_floating_button">16dp</dimen>
     <dimen name="record_transaction_title">14dp</dimen>
     <dimen name="generate_address_subtitle">14sp</dimen>

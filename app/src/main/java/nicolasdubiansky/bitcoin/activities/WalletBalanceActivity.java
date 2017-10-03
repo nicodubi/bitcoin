@@ -7,10 +7,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
-import android.view.Gravity;
-import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
@@ -24,7 +21,6 @@ import nicolasdubiansky.bitcoin.R;
 import nicolasdubiansky.bitcoin.custom_views.AddressView;
 import nicolasdubiansky.bitcoin.entities.User;
 import nicolasdubiansky.bitcoin.events.GetBalanceEvent;
-import nicolasdubiansky.bitcoin.events.GetBalanceEventError;
 import nicolasdubiansky.bitcoin.events.GetBalanceEventSuccess;
 import nicolasdubiansky.bitcoin.events.SendBitcoinsEvent;
 import nicolasdubiansky.bitcoin.events.SendBitcoinsEventSuccess;
@@ -126,13 +122,6 @@ public class WalletBalanceActivity extends AbstractActivity {
     public void getBalanceEventSuccess(GetBalanceEventSuccess event) {
         refreshBalance(event.getBalance());
         stopDialog();
-    }
-
-
-    @Subscribe
-    public void getBalanceEventError(GetBalanceEventError event) {
-        stopDialog();
-        Toast.makeText(this, event.getErrorMsg(), Toast.LENGTH_SHORT).show();
     }
 
     @Subscribe

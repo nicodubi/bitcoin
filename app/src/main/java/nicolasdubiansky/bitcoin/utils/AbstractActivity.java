@@ -1,6 +1,8 @@
 package nicolasdubiansky.bitcoin.utils;
 
 import android.app.ProgressDialog;
+import android.arch.lifecycle.LifecycleRegistry;
+import android.arch.lifecycle.LifecycleRegistryOwner;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -34,14 +36,15 @@ import nicolasdubiansky.bitcoin.web_services.retrofit.RetroiftServiceExecutor;
  * Created by Nicolas on 25/09/2017.
  */
 
-public class AbstractActivity extends AppCompatActivity {
+public class AbstractActivity extends AppCompatActivity implements LifecycleRegistryOwner {
 
     private FrameLayout root;
+    private final LifecycleRegistry mRegistry = new LifecycleRegistry(this);
+
     protected ProgressDialog dialog;
 
     private boolean openFromNotification;
     protected CustomSharedPreferences sharedPreferences;
-
 
 
     @Override
@@ -213,4 +216,8 @@ public class AbstractActivity extends AppCompatActivity {
         stopDialog();
     }
 
+    @Override
+    public LifecycleRegistry getLifecycle() {
+        return mRegistry;
+    }
 }

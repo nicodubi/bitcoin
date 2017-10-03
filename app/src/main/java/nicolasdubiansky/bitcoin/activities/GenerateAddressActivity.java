@@ -1,9 +1,14 @@
 package nicolasdubiansky.bitcoin.activities;
 
+import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.LifecycleOwner;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
@@ -26,6 +31,7 @@ import nicolasdubiansky.bitcoin.events.CreateAddressEvent;
 import nicolasdubiansky.bitcoin.events.CreateAddressEventSuccess;
 import nicolasdubiansky.bitcoin.utils.AbstractActivity;
 import nicolasdubiansky.bitcoin.utils.CustomSharedPreferences;
+import nicolasdubiansky.bitcoin.view_models.AddressViewModel;
 import nicolasdubiansky.bitcoin.web_services.rest_entities.Address;
 
 /**
@@ -42,9 +48,8 @@ public class GenerateAddressActivity extends AbstractActivity {
     FloatingActionButton saveAddress;
     @BindView(R.id.generate_new_address_button_id)
     FloatingActionButton generateNewAddress;
-
+    private AddressViewModel addressViewModel;
     //TODO pass to view model architecture!
-    private Address address;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +58,26 @@ public class GenerateAddressActivity extends AbstractActivity {
         attachRoot(R.layout.activity_generate_address);
         ButterKnife.bind(this);
         registerOnEventBus(this);
-        generateAddressFirstTime();
+        initViewModel();
+        //generateAddressFirstTime();
+    }
+
+    private void initViewModel() {
+        addressViewModel = ViewModelProviders.of(this).get(AddressViewModel.class);
+        registerOnEventBus(addressViewModel);
+        addressViewModel.getAddress().observe(this, new Observer<Address>() {
+            @Override
+            public void onChanged(@Nullable Address address) {
+                if (address != null && address.getAddress() != null) {
+                    addressView.setAddress(address.getAddress());
+                }
+                stopDialog();
+            }
+        });
+        if (addressViewModel.getAddressValue() == null || addressViewModel.getAddressValue().getAddress() == null) {
+            generateAddressFirstTime();
+        }
+
     }
 
     private void generateAddressFirstTime() {
@@ -62,21 +86,21 @@ public class GenerateAddressActivity extends AbstractActivity {
 
     @OnClick(R.id.generate_new_address_button_id)
     public void generateNewAddress() {
-        postEvent(new CreateAddressEvent(), getString(R.string.generating_address),true);
+        postEvent(new CreateAddressEvent(), getString(R.string.generating_address), true);
     }
 
-
-    @Subscribe
-    public void generateAddressSuccess(CreateAddressEventSuccess eventSuccess) {
-        User.getInstance().setAddress(eventSuccess.getAddress());
-        address = eventSuccess.getAddress();
-        addressView.setAddress(address.getAddress());
-        stopDialog();
-    }
-
+    /*
+        @Subscribe
+        public void generateAddressSuccess(CreateAddressEventSuccess eventSuccess) {
+            User.getInstance().setAddress(eventSuccess.getAddress());
+            address = eventSuccess.getAddress();
+            addressView.setAddress(address.getAddress());
+            stopDialog();
+        }
+    */
     @OnClick(R.id.save_address_button_id)
     public void saveAddress() {
-        if (address != null && address.getAddress() != null) {
+        if (addressViewModel.getAddressValue() != null && addressViewModel.getAddressValue().getAddress() != null) {
             showConfirmAddressDialog();
         } else {
             showGenerateAddressAlert();
@@ -115,10 +139,10 @@ public class GenerateAddressActivity extends AbstractActivity {
 
     private void goToWalletBalanceActivity() {
         CustomSharedPreferences sharedPreferences = new CustomSharedPreferences(this);
-        sharedPreferences.saveUserAddress(address);
+        sharedPreferences.saveUserAddress(addressViewModel.getAddressValue());
         Intent intent = new Intent(this, WalletBalanceActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra(ADDRESS_TEXT_KEY, address.getAddress());
+        intent.putExtra(ADDRESS_TEXT_KEY, addressViewModel.getAddressValue().getAddress());
         startActivity(intent);
     }
 
