@@ -21,7 +21,7 @@ public class DateDeserializer implements JsonDeserializer<Date> {
     @Override
     public Date deserialize(JsonElement element, Type arg1, JsonDeserializationContext arg2) throws JsonParseException {
         String date = element.getAsString();
-
+//pruebaaaa
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         format.setTimeZone(TimeZone.getTimeZone("GMT-3"));
         try {
